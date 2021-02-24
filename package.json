@@ -29,5 +29,9 @@
   },
   "devDependencies": {
     "eslint": "^7.15.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hongckh/cold-cli.git"
+  },
 }
