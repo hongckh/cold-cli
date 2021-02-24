@@ -1,0 +1,21 @@
+{
+    "libVer": "0.0.1",
+    "target": {
+        "baseDir": "../",
+        "javaDir": "cold-common-lib",
+        "javaRefreshDir": "src/main/java/com/cold/common/coldcommonlib/domain",
+        "mongooseDir": "cold-common-lib-mongoose",
+        "mongooseRefreshDir": "src/domain",
+        "javascriptDir": "cold-common-lib-js",
+        "javascriptRefreshDir": "src/domain"
+    },
+    "definition": {
+        "baseDir": "definition",
+        "domain": "entities/domain.json",
+        "java": "config/java.json",
+        "javascript": "config/javascript.json",
+        "typescript": "config/typescript.json"
+    },
+    "commentBlockMaxCharPerLine": 80,
+    "indentation": 4
+}

@@ -1,0 +1,143 @@
+{
+    "maven": {
+        "project": {
+            "@attribute": {
+                "xmlns": "http://maven.apache.org/POM/4.0.0",
+                "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+                "xsi:schemaLocation": "http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+            },
+            "modelVersion": "4.0.0",
+            "parent": {
+                "groupId": "org.springframework.boot",
+                "artifactId": "spring-boot-starter-parent",
+                "version": "2.3.0.RELEASE"
+            },
+            "groupId": "com.cold.common",
+            "artifactId": "cold-common-lib",
+            "version": "${libVer}",
+            "name": "cold-common-lib",
+            "description": "Cold Common Domain Java Lib Example",
+            "properties": {
+                "project.build.sourceEncoding": "UTF-8",
+                "java.version": "1.8",
+                "spring-boot.repackage.skip": "true"
+            },
+            "dependencies": {
+                "dependency": [{
+                        "groupId": "org.springframework.boot",
+                        "artifactId": "spring-boot-starter"
+                    },
+                    {
+                        "groupId": "org.springframework.boot",
+                        "artifactId": "spring-boot-starter-data-mongodb",
+                        "version": "2.3.0.RELEASE"
+                    },
+                    {
+                        "groupId": "org.projectlombok",
+                        "artifactId": "lombok",
+                        "version": "1.18.12",
+                        "scope": "provided"
+                    },
+                    {
+                        "groupId": "com.fasterxml.jackson.core",
+                        "artifactId": "jackson-databind",
+                        "version": "2.11.0"
+                    },
+                    {
+                        "groupId": "javax.validation",
+                        "artifactId": "validation-api",
+                        "version": "2.0.1.Final"
+                    },
+                    {
+                        "groupId": "org.springframework.boot",
+                        "artifactId": "spring-boot-starter-test",
+                        "scope": "test",
+                        "exclusions": {
+                            "exclusion": {
+                                "groupId": "org.junit.vintage",
+                                "artifactId": "junit-vintage-engine"
+                            }
+                        }
+                    },
+                    {
+                        "groupId": "org.hibernate.validator",
+                        "artifactId": "hibernate-validator",
+                        "version": "6.1.5.Final"
+                    },
+                    {
+                        "groupId": "org.apache.commons",
+                        "artifactId": "commons-lang3",
+                        "version": "3.10"
+                    },
+                    {
+                        "groupId": "org.javers",
+                        "artifactId": "javers-spring-boot-starter-mongo",
+                        "version": "5.12.0"
+                    }
+                ]
+            },
+            "build": {
+                "plugins": {
+                    "plugin": [{
+                            "groupId": "org.springframework.boot",
+                            "artifactId": "spring-boot-maven-plugin"
+                        },
+                        {
+                            "groupId": "org.apache.maven.plugins",
+                            "artifactId": "maven-javadoc-plugin",
+                            "version": "3.0.0",
+                            "configuration": {
+                                "source": "1.8",
+                                "target": "1.8"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "dependencyMap": {
+        "@Id": "org.springframework.data.annotation.Id",
+        "@Data": "lombok.Data",
+        "@EqualsAndHashCode": "lombok.EqualsAndHashCode",
+        "@ToString": "lombok.ToString",
+        "@JsonInclude": "com.fasterxml.jackson.annotation.JsonInclude",
+        "@JsonSerialize": "com.fasterxml.jackson.databind.annotation.JsonSerialize",
+        "@ValueObject": "org.javers.core.metamodel.annotation.ValueObject",
+        "@NotNull": "javax.validation.constraints.NotNull",
+        "@Document": "org.springframework.data.mongodb.core.mapping.Document",
+        "@Sharded": "org.springframework.data.mongodb.core.mapping.Sharded",
+        "@TypeName": "org.javers.core.metamodel.annotation.TypeName",
+        "@Transient": "org.springframework.data.annotation.Transient",
+        "@Builder": "lombok.Builder",
+        "@AllArgsConstructor": "lombok.AllArgsConstructor",
+        "@NoArgsConstructor": "lombok.NoArgsConstructor",
+        "@Length": "org.hibernate.validator.constraints.Length",
+        "@Size": "javax.validation.constraints.Size",
+        "@JsonProperty": "com.fasterxml.jackson.annotation.JsonProperty",
+        "@Field": "org.springframework.data.mongodb.core.mapping.Field",
+        "Serializable": "java.io.Serializable",
+        "ToStringSerializer": "com.fasterxml.jackson.databind.ser.std.ToStringSerializer",
+        "Set": "java.util.Set",
+        "HashSet": "java.util.HashSet",
+        "HashMap": "java.util.HashMap",
+        "List": "java.util.List",
+        "ArrayList": "java.util.ArrayList",
+        "Map": "java.util.Map",
+        "LocalDateTime": "java.time.LocalDateTime",
+        "LocalDate": "java.time.LocalDate",
+        "ZonedDateTime": "java.time.ZonedDateTime",
+        "ObjectId": "org.bson.types.ObjectId",
+        "Instant": "java.time.Instant"
+    },
+    "annotateDefaultVal": {
+        "EqualsAndHashCode": {
+            "callSuper": true
+        },
+        "ToString": {
+            "callSuper": true,
+            "includeFieldNames": true
+        },
+        "JsonInclude": "JsonInclude.Include.NON_NULL"
+    }
+}

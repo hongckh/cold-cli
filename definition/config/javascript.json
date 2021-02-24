@@ -1,0 +1,72 @@
+{
+    "packageJavascript": {
+        "name": "cold-common-lib-js",
+        "version": "",
+        "description": "Cold Common Javascript libraries Example",
+        "main": "lib/index.js",
+        "typings": "lib/index.d.ts",
+        "scripts": {
+            "prepare": "npm run build",
+            "build": "./node_modules/.bin/ttsc",
+            "test": "echo \"Error: no test specified\" && exit 1",
+            "clean": "rimraf lib"
+        },
+        "files": ["lib"],
+        "author": "",
+        "license": "ISC",
+        "devDependencies": {
+            "ts-transformer-imports": "^0.4.3",
+            "ttypescript": "^1.5.10",
+            "typescript": "^3.9.5"
+        },
+        "dependencies": {
+            "moment": "^2.27.0",
+            "rimraf": "^3.0.2"
+        }
+    },
+    "packageMongoose": {
+        "name": "cold-common-lib-mongoose",
+        "version": "",
+        "description": "Cold Common mongoose libraries Example",
+        "main": "src/index.ts",
+        "scripts": {
+            "prepare": "npm run build",
+            "build": "./node_modules/.bin/ttsc",
+            "test": "echo \"Error: no test specified\" && exit 1",
+            "clean": "rimraf lib"
+        },
+        "files": ["lib"],
+        "author": "",
+        "license": "ISC",
+        "devDependencies": {
+            "ts-transformer-imports": "^0.4.3",
+            "ttypescript": "^1.5.10",
+            "typescript": "^3.9.5"
+        },
+        "dependencies": {
+            "@types/mongoose": "^5.10.3",
+            "rimraf": "^3.0.2"
+        }
+    },
+    "javascriptTypeMap": {
+        "string": ["String", "ObjectId"],
+        "boolean": ["boolean", "Boolean"],
+        "Moment": ["LocalDateTime", "LocalDate", "Instant", "ZonedDateTime"],
+        "number": ["Integer", "Double", "Long", "int", "long", "double"],
+        "Map": "Map",
+        "any": ["byte[]", "Object"]
+    },
+    "mongooseTypeMap": {
+        "String": "String",
+        "Boolean": ["boolean", "Boolean"],
+        "Date": ["LocalDateTime", "LocalDate", "Instant", "ZonedDateTime"],
+        "Number": ["Integer", "Double", "Long", "int", "long", "double"],
+        "Map": "Map",
+        "Schema.Types.ObjectId": "ObjectId",
+        "Buffer": "byte[]",
+        "Schema.Types.Mixed": ["Object"]
+    },
+    "dependencyMap": {
+        "Moment": "moment"
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "tsconfig": {
+        "compilerOptions": {
+            "target": "es6",
+            "module": "commonjs",
+            "lib": ["es2019", "dom"],
+            "declaration": true,
+            "outDir": "lib",
+            "removeComments": false,
+            "strict": true,
+            "baseUrl": "./",
+            "paths": {
+                "src/*": ["src/*"]
+            },
+            "esModuleInterop": true,
+            "skipLibCheck": true,
+            "plugins": [
+                {
+                    "transform": "ts-transformer-imports"
+                }
+            ]
+        },
+        "include": ["src/**/*"],
+        "exclude": ["node_modules"]
+    }
+}

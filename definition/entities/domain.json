@@ -1,0 +1,409 @@
+{
+    "entities": {
+        "common" : {
+            "GpsCoordinate": {
+                "type": "obj",
+                "attributes": {
+                    "latitude": { "type": "Double" },
+                    "longitude": { "type": "Double" }
+                },
+                "properties": {
+                    "implements": "Serializable",
+                    "annotate": ["Data", "JsonInclude"]
+                }
+            },
+            "Image": {
+                "type": "obj",
+                "attributes": {
+                    "id": { "type": "ObjectId", "annotate": ["Id", { "JsonSerialize": { "using": "ToStringSerializer.class" } }] },
+                    "imageId": { "type": "String", "annotate": "NotNull" },
+                    "imageType": { "type": "String", "desc": "To identify the usage of the image as a reference" },
+                    "displaySeq": { "type": "Integer" },
+                    "image": { "type": "byte[]" },
+                    "imageContentType": { "type": "String" },
+                    "remark": { "type": "String" }
+                },
+                "properties": {
+                    "desc": "An Image Document Collection",
+                    "extends": "CreatedAndLastUpdatedAuditEntity",
+                    "annotate": ["Data", "EqualsAndHashCode", "ToString", "JsonInclude", { "Document": { "collection": "image" } }],
+                    "dependencies": ["ToStringSerializer"]
+                }
+            }
+        },
+        "customer": {
+            "Customer": {
+                "type": "obj",
+                "attributes": {
+                    "SEQUENCE_NAME": {
+                        "type": "String",
+                        "default": "\"CUSTOMER_ACCT\"",
+                        "annotate": "Transient",
+                        "isStatic": true,
+                        "isPublic": true,
+                        "isConst": true
+                    },
+                    "id": { "type": "ObjectId", "annotate": ["Id", { "JsonSerialize": { "using": "ToStringSerializer.class" } }] },
+                    "custAcctId": { "type": "String", "annotate": "NotNull" },
+                    "title": { "type": "String" },
+                    "givenName": { "type": "String" },
+                    "familyName": { "type": "String" },
+                    "profilePic": { "type": "byte[]", "desc": "@deprecated : to be removed" },
+                    "profilePicImgId": { "type": "List", "injection" : "String" },
+                    "gender": { "type": "String" },
+                    "birthDate": { "type": "LocalDate" },
+                    "idType": { "type": "String" },
+                    "idNumber": { "type": "String" },
+                    "lang": { "type": "Language", "annotate": "NotNull" },
+                    "options": { "type": "Set", "injection": "CustomerOption" },
+                    "parameters": { "type": "Map", "injection": ["String", "String"], "default": "new HashMap<>()" }
+                },
+                "properties": {
+                    "extends": "CreatedAndLastUpdatedAuditEntity",
+                    "annotate": [
+                        "Data",
+                        "EqualsAndHashCode",
+                        "ToString",
+                        "JsonInclude",
+                        { "Sharded": "shardKey = { \"custAcctId\" }" },
+                        { "Document": { "collection": "customer" } },
+                        { "TypeName": "\"Customer\"" }
+                    ],
+                    "dependencies": ["ToStringSerializer", "HashMap"],
+                    "desc": "A Customer."
+                }
+            }
+        },
+        "log": {
+            "ErrorLog": {
+                "type": "obj",
+                "attributes": {
+                    "response": { "type": "T" },
+                    "errorDateTime": { "type": "LocalDateTime" }
+                },
+                "properties": {
+                    "injection": "T",
+                    "annotate": "Data"
+                }
+            },
+            "TransactionLog": {
+                "type": "obj",
+                "attributes": {
+                    "id": { "type": "ObjectId", "annotate": ["Id", { "JsonSerialize": { "using": "ToStringSerializer.class" } }] },
+                    "transactionId": { "type": "String" },
+                    "objectId": { "type": "ObjectId", "annotate": { "JsonSerialize": { "using": "ToStringSerializer.class" } } },
+                    "request": { "type": "T" },
+                    "response": { "type": "T" },
+                    "transactionDateTime": { "type": "LocalDateTime" },
+                    "errorLogs": { "type": "Set", "injection": "ErrorLog" },
+                    "desc": { "type": "String", "desc": ["Description of transaction", "E.g. class / function name"] }
+                },
+                "properties": {
+                    "annotate": [
+                        "Data",
+                        { "Document": { "collection": "transaction_log" } }
+                    ],
+                    "dependencies": ["ToStringSerializer"],
+                    "injection": "T"
+                }
+            }
+        },
+        "option": {
+            "OptionAbstract": {
+                "type": "obj",
+                "attributes": {
+                    "optionId": { "type": "String", "annotate": "NotNull" },
+                    "optionType": { "type": "T", "annotate": "NotNull" },
+                    "optionDesc": { "type": "String", "annotate": "NotNull" },
+                    "startDate": { "type": "LocalDateTime" },
+                    "endDate": { "type": "LocalDateTime" }
+                },
+                "properties": {
+                    "classType": "ABSTRACT_CLASS",
+                    "extends": "CreatedAndLastUpdatedAuditEntity",
+                    "annotate": ["Data", "EqualsAndHashCode", "ToString", "JsonInclude"],
+                    "injection": { "T": { "extends": ["Serializable"] } }
+                }
+            },
+            "CustomerOption": {
+                "type": "obj",
+                "properties": {
+                    "desc": "Customer Options",
+                    "extends": { "OptionAbstract": { "injection": "CustomerOptionType" } },
+                    "annotate": ["Data", "EqualsAndHashCode", "ToString", "JsonInclude"]
+                }
+            }
+        },
+        "approval": {
+            "ApprovalCollectionAbstract": {
+                "type": "obj",
+                "attributes": {
+                    "id": { "type": "ObjectId", "annotate": ["Id", { "JsonSerialize": { "using": "ToStringSerializer.class" } }] },
+                    "version": { "type": "Integer" },
+                    "approvalStatus": { "type": "ApprovalStatus" },
+                    "requestor": { "type": "String", "desc": "Account of requestor" },
+                    "requestorEmail": { "type": "String" },
+                    "approvers": { "type": "Set", "injection": "String", "desc": "Account set of approver" }
+                },
+                "properties": {
+                    "classType": "ABSTRACT_CLASS",
+                    "annotate": ["Data", "EqualsAndHashCode", "ToString", "JsonInclude"],
+                    "extends": "CreatedAndLastUpdatedAuditEntity",
+                    "dependencies": ["ToStringSerializer"],
+                    "desc": "Abstract class for creating approval collection"
+                }
+            },
+            "ApprovalChange": {
+                "type": "obj",
+                "attributes": {},
+                "properties": {
+                    "extends": "ApprovalCollectionAbstract",
+                    "annotate": [
+                        "Data", "EqualsAndHashCode", "ToString", "JsonInclude",
+                        { "Document": { "collection": "approval_change" } }
+                    ],
+                    "desc": "Approval Change Store the latest approval changes"
+                }
+            }
+        },
+        "user": {
+            "AccountDetail": {
+                "type": "obj",
+                "attributes": {
+                    "account": { "type": "String", "annotate": "NotNull" },
+                    "location": { "type": "String", "annotate": "NotNull" },
+                    "department": { "type": "Department", "annotate": "NotNull" },
+                    "accountDescription": { "type": "String" }
+                },
+                "properties": {
+                    "extends": "BaseDocumentAuditEntity",
+                    "annotate": ["Data", "EqualsAndHashCode", "ToString", "JsonInclude"]
+                }
+            },
+            "Department": {
+                "type": "obj",
+                "attributes": {
+                    "code": { "type": "String" },
+                    "type": { "type": "String" },
+                    "description": { "type": "String" },
+                    "billDescription": { "type": "String" },
+                    "email": { "type": "String" }
+                },
+                "properties": {
+                    "extends": "BaseDocumentAuditEntity",
+                    "annotate": ["Data", "EqualsAndHashCode", "ToString", "JsonInclude"]
+                }
+            },
+            "Role": {
+                "type": "obj",
+                "attributes": {
+                    "name": { "type": "String", "desc": "Unique name" },
+                    "accessCode": { "type": "String" },
+                    "accessLevel": { "type": "String" }
+                },
+                "properties": {
+                    "extends": "BaseDocumentAuditEntity",
+                    "annotate": ["Data", "EqualsAndHashCode", "ToString", "JsonInclude"]
+                }
+            },
+            "ColdUser": {
+                "type": "obj",
+                "attributes": {
+                    "id": { "type": "ObjectId", "annotate": ["Id", { "JsonSerialize": { "using": "ToStringSerializer.class" } }] },
+                    "login": { "type": "String", "annotate": "NotNull" },
+                    "email": { "type": "String" },
+                    "name": { "type": "String" },
+                    "userAccounts": { "type": "Set", "injection": "UserAccount" }
+                },
+                "properties": {
+                    "desc": "A Cold User.",
+                    "extends": "CreatedAndLastUpdatedAuditEntity",
+                    "annotate": [
+                        "Data", "EqualsAndHashCode", "ToString", "JsonInclude",
+                        { "Document": { "collection": "cold_user" } }
+                    ],
+                    "dependencies": ["ToStringSerializer"]
+                }
+            },
+            "UserAccount": {
+                "type": "obj",
+                "attributes": {
+                    "userAccountId": { "type": "String", "desc": "User Account Id" },
+                    "accountDetail": { "type": "AccountDetail" },
+                    "roles": { "type": "Set", "injection": "Role" },
+                    "userGroups": { "type": "Set", "injection": "String" }
+                },
+                "properties": {
+                    "extends": "CreatedAndLastUpdatedAuditEntity",
+                    "annotate": ["Data", "EqualsAndHashCode", "ToString", "JsonInclude"]
+                }
+            },
+            "UserGroup": {
+                "type": "obj",
+                "attributes": {
+                    "id": { "type": "ObjectId", "annotate": ["Id", { "JsonSerialize": { "using": "ToStringSerializer.class" } }] },
+                    "name": { "type": "String", "desc": "User Group Name (Unique)" },
+                    "roles": { "type": "Set", "injection": "Role" }
+                },
+                "properties": {
+                    "desc": "A UserGroup.",
+                    "extends": "CreatedAndLastUpdatedAuditEntity",
+                    "annotate": [
+                        "Data", "EqualsAndHashCode", "ToString", "JsonInclude",
+                        { "Document": { "collection": "user_group" } }
+                    ],
+                    "dependencies": ["ToStringSerializer"]
+                }
+            }
+        },
+        "wallet": {
+            "WalletHistory": {
+                "type": "obj",
+                "attributes": {
+                    "id": { "type": "ObjectId", "annotate": ["Id", { "JsonSerialize": { "using": "ToStringSerializer.class" } }] },
+                    "transactionId": { "type": "String", "desc": "UUID" },
+                    "userAcctId": { "type": "String" }
+                },
+                "properties": {
+                    "extends": "CreatedAndLastUpdatedAuditEntity",
+                    "annotate": [
+                        "Data", "EqualsAndHashCode", "ToString", "JsonInclude",
+                        { "Document": { "collection": "wallet_history" } }
+                    ],
+                    "dependencies": ["ToStringSerializer"],
+                    "desc": ["Wallet History"]
+                }
+            }
+        }
+    },
+    "enumeration": {
+        "common": {
+            "Language": {
+                "type": "obj",
+                "attributes": ["CHINESE", "ENGLISH", "INDONESIAN"],
+                "properties": { "classType": "ENUM", "desc": "The Language enumeration." }
+            },
+            "LangLocale": {
+                "type": "obj",
+                "attributes": ["ZH_TW", "ZH_CN", "EN_US"],
+                "properties": { "classType": "ENUM" }
+            },
+            "MIMEType": {
+                "type": "obj",
+                "attributes": [
+                    "JPEG",
+                    "JPG",
+                    "JSON",
+                    "JSONLD",
+                    "TIF",
+                    "TIFF",
+                    "TS",
+                    "TTF",
+                    "TXT"
+                ],
+                "properties": {
+                    "classType": "ENUM",
+                    "desc": [
+                        "MIME Type - Media Type",
+                        "Label used to identify a type of data",
+                        "Reference : MDN web docs - Common MIME Types"
+                    ]
+                }
+            }
+        },
+        "options" : {
+            "CustomerOptionType" : {
+                "type" : "obj",
+                "attributes" : [ "OPTION_1", "OPTION_2", "OPTION_3" ],
+                "properties" : { "classType" : "ENUM", "desc" : "The Customer Option Type enumeration."}
+            }
+        },
+        "status": {
+            "ApprovalStatus": {
+                "type": "obj",
+                "attributes": ["READY_TO_APPROVE", "APPROVED", "REJECT", "DRAFT", "RELEASE"],
+                "properties": { "classType": "ENUM", "desc": "The Approval Status enumeration." }
+            }
+        },
+        "user": {
+            "UserRole": {
+                "type": "obj",
+                "attributes": [
+                    "CREATE_ACCOUNT",
+                    "SUSPEND_ACCOUNT",
+                    { "DELETE_ACCOUNT": { "desc": "Delete User Account" } }
+                ],
+                "properties": { "classType": "ENUM", "desc": "The UserRoles enumeration." }
+            }
+        }
+    },
+    "CreatedAndLastUpdatedAuditEntity": {
+        "type": "obj",
+        "attributes": {
+            "lockCount": { "type": "Integer" },
+            "createdBy": {
+                "type": "String",
+                "desc": "Created By"
+            },
+            "createdDate": { "type": "LocalDateTime" },
+            "lastUpdatedBy": { "type": "String" },
+            "lastUpdatedDate": {
+                "type": "LocalDateTime",
+                "default": "LOCAL_DATE_TIME_NOW"
+            }
+        },
+        "properties": {
+            "classType": "ABSTRACT_CLASS",
+            "desc": "Base abstract class for entities which will hold definitions for created, last modified, created by, last modified by attributes.",
+            "extends": "BaseDocumentAuditEntity",
+            "annotate": ["Data", "EqualsAndHashCode", "ToString", "JsonInclude"]
+        }
+    },
+    "BaseDocumentAuditEntity": {
+        "type": "obj",
+        "attributes": {
+            "deleteFlag": {
+                "type": "Boolean",
+                "desc": "The deleteFlag Boolean is for logical delete of data. This flag is used for both collection and embedded level documents."
+            }
+        },
+        "properties": {
+            "desc": "Base Document Audit Entity",
+            "classType": "ABSTRACT_CLASS",
+            "implements": "Serializable",
+            "annotate": ["Data", "JsonInclude"]
+        }
+    },
+    "PersistentAuditEvent": {
+        "type": "obj",
+        "attributes": {
+            "id": { "type": "String", "annotate": "Id" },
+            "principal": { "type": "String", "annotate": "NotNull" },
+            "auditEventDate": { "type": "Instant", "annotate": { "Field": "\"event_date\"" } },
+            "auditEventType": { "type": "String", "annotate": { "Field": "\"event_type\"" } },
+            "data": { "type": "Map", "injection": ["String", "String"] }
+        },
+        "properties": {
+            "desc": [
+                "Persist AuditEvent managed by the Spring Boot actuator.\n"
+            ],
+            "implements": "Serializable",
+            "annotate": [
+                "Data", "JsonInclude",
+                { "Document": { "collection": "persistent_audit_event" } }
+            ]
+        }
+    },
+    "Result": {
+        "type": "obj",
+        "attributes": {
+            "success": { "type": "boolean" },
+            "message": { "type": "String" },
+            "error": { "type": "String" }
+        },
+        "properties": {
+            "implements": "Serializable",
+            "annotate": ["Data", "JsonInclude"]
+        }
+    }
+}
