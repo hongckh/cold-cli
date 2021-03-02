@@ -1,8 +1,8 @@
 const _ = require('lodash');
 const xmlBuilder = require('xmlbuilder');
-const config = require('config');
 
 const logger = require('src/service/logger.service');
+const ConfigProperties = require('src/config/config-properties');
 
 class XmlBuilderUtils {
 
@@ -12,8 +12,12 @@ class XmlBuilderUtils {
      */
     static buildXmlFromJson(json){
         if(_.isEmpty(json)) return {};
-        const xmlObj = this.getXmlObjFromJson(json);
-        return xmlBuilder.create(xmlObj).end({ pretty: true});
+        try {
+            const xmlObj = this.getXmlObjFromJson(json);
+            return xmlBuilder.create(xmlObj).end({ pretty: true});
+        } catch (err) {
+            throw 'Failed to build XML from JSON';
+        }
     }
 
     /**
@@ -31,9 +35,9 @@ class XmlBuilderUtils {
                 if(/^\${.*}$/.test(value)) {
                     let configVal;
                     try{
-                        configVal = config.get(value.replace(/^\${/,'').replace(/}$/, ''));
+                        configVal = ConfigProperties.CONFIG_JSON[value.replace(/^\${/,'').replace(/}$/, '')];
                     } catch (err) {
-                        logger.error(err);
+                        logger.error('XML Object generation error : ' + err);
                         configVal = undefined;
                     }
                     xmlObj[key] = { '#text': configVal ? configVal : value };

@@ -1,4 +1,5 @@
 const config = require('config');
+const _ = require('lodash');
 
 const CommonUtils = require('src/utils/common.utils');
 
@@ -8,13 +9,33 @@ const CommonUtils = require('src/utils/common.utils');
 class ConfigProperties {
 
     constructor() {
+        this.CONFIG_FILENAME = config.get('configFile');
+    }
+
+    /** Get coldConfig.json from directory */
+    getConfigFileJsonFromDir(dir){
+        if(_.isEmpty(dir ? dir.trim() : dir)) dir = '.';
+        dir = dir.replace(/[\\/](1)$/, '');
+        const configFile = `${dir}/${this.CONFIG_FILENAME}`;
+        if(CommonUtils.isExistFile(configFile)){
+            return CommonUtils.getJsonFromFile(configFile);
+        } else {
+            throw `No configuration file[${this.CONFIG_FILENAME}] found in directory: ${dir}`;
+        }
+    }
+
+    /** Init the application config */
+    initConfig(dir){
+
+        this.CONFIG_JSON = this.getConfigFileJsonFromDir(dir);
+
         /** Get Library Version */
-        this.LIB_VERSION = config.get('libVer');
+        this.LIB_VERSION = this.CONFIG_JSON.libVer;
 
         /**
          * Setup Generation target directories
          */
-        this.OUTPUT_TARGET = config.get('target');
+        this.OUTPUT_TARGET = this.CONFIG_JSON.target;
         this.OUTPUT_TARGET_DIR_BASE = this.OUTPUT_TARGET.baseDir;
         /** JAVA */
         this.OUTPUT_TARGET_DIR_JAVA = `${this.OUTPUT_TARGET_DIR_BASE}/${this.OUTPUT_TARGET.javaDir}`;
@@ -23,13 +44,13 @@ class ConfigProperties {
         this.OUTPUT_TARGET_DIR_MONGOOSE = `${this.OUTPUT_TARGET_DIR_BASE}/${this.OUTPUT_TARGET.mongooseDir}`;
         this.OUTPUT_TARGET_DIR_MONGOOSE_REFRESH = `${this.OUTPUT_TARGET_DIR_MONGOOSE}/${this.OUTPUT_TARGET.mongooseRefreshDir}`;
         /** Javascript */
-        this.OUTPUT_TARGET_DIR_JS = `${this.OUTPUT_TARGET_DIR_BASE}/${this.OUTPUT_TARGET.javascriptDir}`;
-        this.OUTPUT_TARGET_DIR_JS_REFRESH = `${this.OUTPUT_TARGET_DIR_JS}/${this.OUTPUT_TARGET.javascriptRefreshDir}`;
+        this.OUTPUT_TARGET_DIR_JS = `${this.OUTPUT_TARGET_DIR_BASE}/${this.OUTPUT_TARGET.jsDir}`;
+        this.OUTPUT_TARGET_DIR_JS_REFRESH = `${this.OUTPUT_TARGET_DIR_JS}/${this.OUTPUT_TARGET.jsRefreshDir}`;
 
         /**
          * Setup Definition Directories
          */
-        this.DEFINITION_CONFIG = config.get('definition');
+        this.DEFINITION_CONFIG = this.CONFIG_JSON.definition;
         this.DEFINITION_BASE_DIR = this.DEFINITION_CONFIG.baseDir;
         this.DEFINITION_DOMAIN_FILE = `${this.DEFINITION_BASE_DIR}/${this.DEFINITION_CONFIG.domain}`;
         this.DEFINITION_JAVA_FILE = `${this.DEFINITION_BASE_DIR}/${this.DEFINITION_CONFIG.java}`;
@@ -76,11 +97,14 @@ class ConfigProperties {
         this.PACKAGE_ROOT_JS = 'domain';
 
         /** Indentation */
-        this.INDENTATION_MULTIPLIER = config.get('indentation') ? config.get('indentation') : 4;
+        this.INDENTATION_MULTIPLIER = this.CONFIG_JSON.indentation ? this.CONFIG_JSON.indentation : config.get('indentation');
         this.INDENTATION = ' '.repeat(this.INDENTATION_MULTIPLIER);
 
+        /** Comment block  */
+        this.MAX_CHAR_PER_LINE = !_.isEmpty(this.CONFIG_JSON.commentBlockMaxCharPerLine) ? this.CONFIG_JSON.commentBlockMaxCharPerLine : config.get('commentBlockMaxCharPerLine');
     }
 
+    /** Get library version */
     getLibVer() { return this.LIB_VERSION; }
 
 }

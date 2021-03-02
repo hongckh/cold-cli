@@ -19,6 +19,11 @@ class CommonUtils {
         }
     }
 
+    /** Check if file exist  */
+    static isExistFile(filePath) {
+        return fs.existsSync(filePath);
+    }
+
     /**
      * Get the time difference
      * @param {*} date

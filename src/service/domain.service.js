@@ -1,4 +1,3 @@
-const config = require('config');
 const _ = require('lodash');
 
 const logger = require('src/service/logger.service');
@@ -8,6 +7,10 @@ const ConfigProperties = require('src/config/config-properties');
 
 class DomainService {
     constructor() {
+        this.init();
+    }
+
+    init(){
         this.DEFINITION_DOMAIN_FILE = ConfigProperties.DEFINITION_DOMAIN_FILE;
         this.DEF_JSON_DOMAIN = ConfigProperties.DEF_JSON_DOMAIN;
         this.PACKAGE_ROOT = ConfigProperties.PACKAGE_ROOT;
@@ -17,7 +20,6 @@ class DomainService {
         this.DEF_JSON_JS_DEPENDENCY_MAP = ConfigProperties.DEF_JSON_JS_DEPENDENCY_MAP;
 
         this.COUNT_CLASS = undefined;
-
     }
 
     /** Count total class in domain */

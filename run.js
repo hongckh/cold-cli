@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // set root path as project root directory
 require('app-module-path').addPath(__dirname);
 
@@ -11,6 +13,7 @@ const figlet = require('figlet');
 const pjson = require('@root/package.json');
 
 // application starting console log (not logged in log file)
+console.log();
 console.log(figlet.textSync('COLD-CLI', {
     horizontalLayout: 'default',
     verticalLayout: 'default',
@@ -19,28 +22,28 @@ console.log(figlet.textSync('COLD-CLI', {
 }));
 
 console.log(boxen(
-    chalk.green(`Starting application: ${pjson.name} (ver.${pjson.version})\n`) +
+    (`Starting application: ${chalk.green(pjson.name)} (${chalk.green('ver.' +pjson.version)})\n`) +
     `Description: ${pjson.description}`,
     {padding: 1}
 ));
 
 const endApp = () => {
-    console.log('========= Ending application... =========');
-    console.log();
+    console.log('\n========= Ending application... =========\n');
 };
 
 (async () => {
     try {
         // initialize application
-        const appInit = require('src/config/app-init.config');
-        await appInit.init();
+        // const appInit = require('src/config/app-init.config');
+        // await appInit.init();
 
 
         const cliService = require('src/service/cli.service');
         await cliService.run();
         // endApp();
     } catch (e) {
-        console.log(`** Fetal application error: ${e}`);
+        console.log();
+        console.log(chalk.red.bold('** Fetal application error : ') + e);
         endApp();
     }
 
