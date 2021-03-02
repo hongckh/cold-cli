@@ -30,7 +30,12 @@ Currently supports: `Java`, `JavaScript`, `Mongoose(Js)`
     - [`Typescript` config](#typescript-config)
       - [Typescript config - `tsconfig`](#typescript-config---tsconfig)
   - [Domain Definition](#domain-definition)
-    - [Class Definition (Basic)](#class-definition-basic)
+    - [Class Definition](#class-definition)
+      - [Class Definition - `attributes`](#class-definition---attributes)
+        - [attributes obj - `type`](#attributes-obj---type)
+        - [attributes obj - `injection`](#attributes-obj---injection)
+        - [attributes obj - `annotate`](#attributes-obj---annotate)
+        - [attributes obj - `desc`](#attributes-obj---desc)
 
 ## Installation
 
@@ -124,7 +129,7 @@ The CLI will look for a config file `coldConfig.json` upon initialization. You h
 
 ## Language based config
 
-The CLI requires 3 language based config java, javascript, and typescript.
+The CLI requires 3 language based config: java, javascript, and typescript.
 
 ### `Java` config
 
@@ -355,19 +360,203 @@ Here are the key components of the typescript config.
 - The domain definition is mapped in `coldConfig.json`.`definition`.`domain`.
 - The definition object types are mainly based on Java.
 
-### Class Definition (Basic)
+### Class Definition
+
+- A class is defined as an object with `"type": "obj"`. Object without this property will be treated as a directory / package.
+- Here are the 3 main components of a class:
+
+| key          | desc                                                        |
+| ------------ | ----------------------------------------------------------- |
+| `type`       | indicate the object is a class by `"type": "obj"`           |
+| `attributes` | defines the attributes of the class                         |
+| `properties` | defines the class properties e.g. annotations and extension |
+
+- Example:
 
 ```JSON
 {
-    "Result": {
-        "type": "obj",
-        "attributes": {
-            "success": { "type": "boolean" },
-            "message": { "type": "String" },
-            "error": { "type": "String" }
-        },
-        "properties": {
+    "packageA" : {
+        "ClassA": {
+            "type": "obj",
+            "attributes": {
+                "classAField": { "type": "boolean" }
+            },
+            "properties": {
+                "annotate" : "Data"
+            }
         }
     }
+
 }
+```
+
+- Generated java:
+
+```java
+package com.cold.common.coldcommonlib.domain.packagea;
+
+import lombok.Data;
+
+@Data
+public class ClassA {
+
+    private boolean classAField;
+
+    public ClassA classAField(boolean classAField) {
+        this.classAField = classAField;
+        return this;
+    }
+
+}
+```
+
+- Generated javascript:
+
+```js
+export interface IClassA {
+    classAField?: boolean;
+}
+
+export class ClassA implements IClassA {
+    constructor(
+        public classAField?: boolean,
+    ){}
+}
+```
+
+- Generated Mongoose:
+
+```js
+import { Schema } from "mongoose";
+
+const ClassASchema = new Schema ({
+    classAField: Boolean,
+});
+
+export { ClassASchema };
+
+```
+
+---
+
+#### Class Definition - `attributes`
+
+- the `attributes` key indicates the object storing the class attributes.
+- Here are the main components of an attribute object:
+
+| key         | desc                                                | example                   |
+| ----------- | --------------------------------------------------- | ------------------------- |
+| `type`      | type of attribute                                   | `"type": "String"`        |
+| `injection` | type of class for injecting into the attribute type | `"injection": "String"`   |
+| `annotate`  | annotation of the attribute                         | `"annotate": "NotNull"`   |
+| `desc`      | description of the attribute                        | `"desc": "A short desc."` |
+
+##### attributes obj - `type`
+
+- Java: directly write the same value
+- Javascript: base on the `javascriptTypeMap`
+- Mongoose: base on the `mongooseTypeMap`
+
+##### attributes obj - `injection`
+
+- Inject the defined class into the attribute type.
+- Can be a string or an array
+- Example:
+
+```json
+"ClassA": {
+    "type": "obj",
+    "attributes": {
+        "classAField1": { "type": "List", "injection" : "String" },
+        "classAField2": { "type": "Map", "injection" : [ "String", "String"] }
+    },
+    "properties": { "annotate" : "Data" }
+}
+```
+
+- Java:
+
+```java
+...
+@Data
+public class ClassA {
+    private List<String> classAField1;
+    private Map<String,String> classAField2;
+...
+}
+```
+
+- Javascript:
+
+```js
+export interface IClassA {
+    classAField1?: string[];
+    classAField2?: Map<string,string>;
+}
+
+export class ClassA implements IClassA {
+    constructor(
+        public classAField1?: string[],
+        public classAField2?: Map<string,string>,
+    ){}
+}
+```
+
+- Mongoose:
+
+```js
+const ClassASchema = new Schema ({
+    classAField1: [ String ],
+    classAField2: Map,
+});
+```
+
+##### attributes obj - `annotate`
+
+- annotation is mainly for java code generation.
+- it can be a string / an object / a array.
+- Example:
+
+```json
+"attributes": {
+    "classAField1": { "type": "String", "annotate" : "NotNull" },
+    "classAField2": { "type": "String", "annotate": [
+        { "NotNull" : { "message" : "custAcctId cannot be null" }},
+        { "Length" : { "min" : 15, "max" : 15, "message" : "Invalid custAcctId" } }
+    ]}
+},
+```
+
+- Generated Java:
+
+```java
+@NotNull
+private String classAField1;
+
+@NotNull(message = "custAcctId cannot be null")
+@Length(min = 15, max = 15, message = "Invalid custAcctId")
+private String classAField2;
+```
+
+##### attributes obj - `desc`
+
+- Defines the comment of the attribute
+- Can be a string or an array of string
+
+```json
+"classAField1": { "type": "String", "desc" : "a desc" },
+"classAField2": { "type": "String", "desc": [ "desc line 1", "desc line 2" ]}
+```
+
+- Generated desc:
+
+```java
+/** a desc */
+private String classAField1;
+
+/**
+    * desc line 1
+    * desc line 2
+*/
+private String classAField2;
 ```
