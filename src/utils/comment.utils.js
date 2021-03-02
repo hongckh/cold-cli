@@ -1,9 +1,20 @@
-const config = require('config');
 const _ = require('lodash');
 
-const MAX_CHAR_PER_LINE = config.get('commentBlockMaxCharPerLine');
-
+const ConfigProperties = require('src/config/config-properties');
 class CommentUtils {
+
+    constructor(){
+        this.MAX_CHAR_PER_LINE = 4;
+    }
+
+    static updateMaxCharPerLineByConfig(){
+        this.MAX_CHAR_PER_LINE = ConfigProperties.MAX_CHAR_PER_LINE;
+    }
+
+    static setMaxCharPerLine(maxChar) {
+        this.MAX_CHAR_PER_LINE = maxChar;
+    }
+
     /**
      * Get comment block
      * Support string / array
@@ -22,9 +33,9 @@ class CommentUtils {
     static getCommentBlockArrFromStr(str) {
         if (!str) return [];
 
-        if (str.length <= MAX_CHAR_PER_LINE) return [`/** ${str} */`];
+        if (str.length <= this.MAX_CHAR_PER_LINE) return [`/** ${str} */`];
 
-        const splitRegex = new RegExp(`.{1,${MAX_CHAR_PER_LINE}}`, 'g');
+        const splitRegex = new RegExp(`.{1,${this.MAX_CHAR_PER_LINE}}`, 'g');
         const splittedStrArr = str.match(splitRegex);
         if(!Array.isArray(splittedStrArr)) return [];
         const splittedStrCommentArr = [];
@@ -54,12 +65,12 @@ class CommentUtils {
         const commentBlockStrArr = [];
 
         strArr.forEach(str => {
-            if(str.length <= MAX_CHAR_PER_LINE ) {
+            if(str.length <= this.MAX_CHAR_PER_LINE ) {
                 commentBlockStrArr.push(` * ${str}`);
                 return;
             }
 
-            const splitRegex = new RegExp(`.{1,${MAX_CHAR_PER_LINE}}`, 'g');
+            const splitRegex = new RegExp(`.{1,${this.MAX_CHAR_PER_LINE}}`, 'g');
             const splittedStrArr = str.match(splitRegex);
             if(!Array.isArray(splittedStrArr)) return;
 
