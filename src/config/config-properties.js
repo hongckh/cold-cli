@@ -122,7 +122,9 @@ class ConfigProperties {
 
     /** Check if log is enabled */
     isLogEnabled() {
-        if (this.LOG_DIR) return true;
+        if(_.isNil(this.CONFIG_JSON.logEnabled)){
+            return !_.isEmpty(this.CONFIG_JSON.logDir);
+        }
         return this.LOG_ENABLED;
     }
 

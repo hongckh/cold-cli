@@ -2,7 +2,7 @@
     "libVer": "0.0.1",
     "target": {
         "baseDir": "../",
-        "javaDir": "cold-common-lib",
+        "javaDir": "cold-common-lib-java",
         "javaRefreshDir": "src/main/java/com/cold/common/coldcommonlib/domain",
         "mongooseDir": "cold-common-lib-mongoose",
         "mongooseRefreshDir": "src/domain",
@@ -18,6 +18,6 @@
     },
     "commentBlockMaxCharPerLine": 80,
     "indentation": 4,
-    "logEnabled" : true,
-    "logDir" : "logs"
+    "logEnabled" : false,
+    "logDir": "logs"
 }
