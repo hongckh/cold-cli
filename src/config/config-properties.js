@@ -1,7 +1,12 @@
-const config = require('config');
 const _ = require('lodash');
 
 const CommonUtils = require('src/utils/common.utils');
+
+const DEF_CONFIG = {
+    configFile : "coldConfig.json",
+    commentBlockMaxCharPerLine : 80,
+    indentation : 4
+};
 
 /**
  * Service for getting configuration definitions
@@ -9,7 +14,7 @@ const CommonUtils = require('src/utils/common.utils');
 class ConfigProperties {
 
     constructor() {
-        this.CONFIG_FILENAME = config.get('configFile');
+        this.CONFIG_FILENAME = DEF_CONFIG.configFile;
     }
 
     /** Get coldConfig.json from directory */
@@ -97,11 +102,11 @@ class ConfigProperties {
         this.PACKAGE_ROOT_JS = 'domain';
 
         /** Indentation */
-        this.INDENTATION_MULTIPLIER = this.CONFIG_JSON.indentation ? this.CONFIG_JSON.indentation : config.get('indentation');
+        this.INDENTATION_MULTIPLIER = this.CONFIG_JSON.indentation ? this.CONFIG_JSON.indentation : DEF_CONFIG.indentation;
         this.INDENTATION = ' '.repeat(this.INDENTATION_MULTIPLIER);
 
         /** Comment block  */
-        this.MAX_CHAR_PER_LINE = !_.isEmpty(this.CONFIG_JSON.commentBlockMaxCharPerLine) ? this.CONFIG_JSON.commentBlockMaxCharPerLine : config.get('commentBlockMaxCharPerLine');
+        this.MAX_CHAR_PER_LINE = !_.isEmpty(this.CONFIG_JSON.commentBlockMaxCharPerLine) ? this.CONFIG_JSON.commentBlockMaxCharPerLine : DEF_CONFIG.commentBlockMaxCharPerLine;
     }
 
     /** Get library version */

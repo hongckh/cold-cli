@@ -33,10 +33,6 @@ const endApp = () => {
 
 (async () => {
     try {
-        // initialize application
-        // const appInit = require('src/config/app-init.config');
-        // await appInit.init();
-
 
         const cliService = require('src/service/cli.service');
         await cliService.run();

@@ -1,8 +1,8 @@
 {
   "name": "cold-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "CLI tool to generate CrOss Language Domain entities",
-  "main": "run.js",
+  "main": "coldx.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,7 +12,6 @@
     "app-module-path": "^2.2.0",
     "boxen": "^5.0.0",
     "chalk": "^4.1.0",
-    "config": "^3.3.3",
     "figlet": "^1.5.0",
     "inquirer": "^7.3.3",
     "jsonfile": "^6.1.0",
@@ -35,6 +34,6 @@
     "url": "https://github.com/hongckh/cold-cli.git"
   },
   "bin": {
-    "coldx": "./run.js"
+    "coldx": "./coldx.js"
   }
 }
