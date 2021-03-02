@@ -10,7 +10,7 @@
         "jsRefreshDir": "src/domain"
     },
     "definition": {
-        "baseDir": "definition",
+        "baseDir": "./example/definition",
         "domain": "entities/domain.json",
         "java": "config/java.json",
         "javascript": "config/javascript.json",
