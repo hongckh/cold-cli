@@ -50,13 +50,13 @@ const getSyncTime = (lastUpdatedBy) => {
 
 const logFormatFile = winston.format.printf(function (info) {
   const now = getSyncTime(LAST_UPDATED_BY_FILE);
-  return `${now} [${info.level.toUpperCase()}]: ${JSON.stringify(info.message, null, 4).slice(1, -1)}`;
+  return `${now} [${info.level.toUpperCase()}]: ${info.message ? JSON.stringify(info.message, null, 4).slice(1, -1) : ''}`;
 });
 
 const logFormatConsole = winston.format.printf(function (info) {
   getSyncTime(LAST_UPDATED_BY_CONSOLE);
   const timeOnly = `${timeSync.time.toLocaleTimeString([],timeFormatShort)}:${String(timeSync.time.getMilliseconds()).padStart(3,0)}`;
-  return `${timeOnly} [${info.level}]: ${JSON.stringify(info.message, null, 4).slice(1, -1)}`;
+  return `${timeOnly} [${info.level}]: ${info.message ? JSON.stringify(info.message, null, 4).slice(1, -1) : ''}`;
 });
 
 const options = {
