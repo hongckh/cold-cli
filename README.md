@@ -20,14 +20,21 @@ Currently supports: `Java`, `JavaScript`, `Mongoose(Js)`
       - [Sample coldConfig.json](#sample-coldconfigjson)
   - [Language based config](#language-based-config)
     - [`Java` config](#java-config)
-      - [`Java` config - `maven`](#java-config---maven)
-      - [`Java` config - `dependencyMap`](#java-config---dependencymap)
-      - [`Java` config - `annotateDefaultVal`](#java-config---annotatedefaultval)
+      - [Java config - `maven`](#java-config---maven)
+      - [Java config - `dependencyMap`](#java-config---dependencymap)
+      - [Java config - `annotateDefaultVal`](#java-config---annotatedefaultval)
+    - [`Javascript` config](#javascript-config)
+      - [Javascript config - `packageJavascript` / `packageMongoose`](#javascript-config---packagejavascript--packagemongoose)
+      - [Javascript config - `javascriptTypeMap` / `mongooseTypeMap`](#javascript-config---javascripttypemap--mongoosetypemap)
+      - [Javascript config - `dependencyMap`](#javascript-config---dependencymap)
+    - [`Typescript` config](#typescript-config)
+      - [Typescript config - `tsconfig`](#typescript-config---tsconfig)
   - [Domain Definition](#domain-definition)
-    - [Class Definition](#class-definition)
+    - [Class Definition (Basic)](#class-definition-basic)
+
 ## Installation
 
--   install the CLI tool globally
+- install the CLI tool globally
 
 ```sh
 npm i -g cold-cli
@@ -35,7 +42,7 @@ npm i -g cold-cli
 
 ## Start CLI
 
--   type `coldx` in the command line after installation of the cli package
+- type `coldx` in the command line after installation of the cli package
 
 ```sh
 coldx
@@ -117,13 +124,13 @@ The CLI will look for a config file `coldConfig.json` upon initialization. You h
 
 ## Language based config
 
-The CLI requires 3 language based config `java`, `javascript`, and `typescript`.
+The CLI requires 3 language based config java, javascript, and typescript.
 
 ### `Java` config
 
-The `Java` is mapped in `coldConfig.json`.`definition`.`java`.
+The java config is mapped in `coldConfig.json`.`definition`.`java`.
 
-Here are the key components of the `Java` config.
+Here are the key components of the java config.
 
 | key                | desc                                    |
 | ------------------ | --------------------------------------- |
@@ -133,9 +140,9 @@ Here are the key components of the `Java` config.
 
 ---
 
-#### `Java` config - `maven`
+#### Java config - `maven`
 
-This part defines how the `pom.xml` will be generated.
+- Defines how the `pom.xml` will be generated.
 
 - Definition:
 
@@ -184,13 +191,13 @@ This part defines how the `pom.xml` will be generated.
 ```
 
 - The xml generation is based on the `xmlbuilder` package.
-- Any `${}` (e.g. `${libVer}`) in the json template will be replaced by the same config in `coldConfig.json`.
+- Any `${}` (e.g. `${libVer}`) in the json template will be replaced by the same config in coldConfig.json.
 
 ---
 
-#### `Java` config - `dependencyMap`
+#### Java config - `dependencyMap`
 
-- `dependencyMap` stores the dependency mapping for generated the required _`import ...`_ string in java class.
+- Stores the dependency mapping for generated the required _`import ...`_ string in java class.
 - for any annotation dependency `@` will be the key-prefix. E.g. `@Data`
 - Example:
 
@@ -198,7 +205,7 @@ This part defines how the `pom.xml` will be generated.
 {
     "dependencyMap": {
         "@Data": "lombok.Data",
-        "Set": "java.util.Set",
+        "Set": "java.util.Set"
     }
 }
 ```
@@ -218,9 +225,9 @@ public class ... {
 
 ---
 
-#### `Java` config - `annotateDefaultVal`
+#### Java config - `annotateDefaultVal`
 
-- `annotateDefaultVal` defines the default value for each annotation if any.
+- Defines the default value for each annotation if any.
 - Example:
 
 ```json
@@ -243,11 +250,112 @@ public class ... {
 public class ...
 ```
 
+---
+
+### `Javascript` config
+
+The javascript config is mapped in `coldConfig.json`.`definition`.`javascript`.
+
+Here are the key components of the javascript config.
+
+| key               | desc                                                    |
+| ----------------- | ------------------------------------------------------- |
+| packageJavascript | the definition for generating javascript `package.json` |
+| packageMongoose   | the definition for generating mongoose `package.json`   |
+| javascriptTypeMap | mapping for javascript type conversion                  |
+| mongooseTypeMap   | mapping for mongoose type conversion                    |
+| dependencyMap     | define dependency needed for specific type              |
+
+---
+
+#### Javascript config - `packageJavascript` / `packageMongoose`
+
+- Same as `package.json`
+
+---
+
+#### Javascript config - `javascriptTypeMap` / `mongooseTypeMap`
+
+- Type conversion mapping
+- Mapping example:
+
+```json
+{
+    "javascriptTypeMap": {
+        "string": ["String", "ObjectId"]
+    },
+    "mongooseTypeMap": {
+        "Schema.Types.ObjectId": "ObjectId"
+    }
+}
+```
+
+- Generated
+
+```js
+// javascript
+...
+export interface ... {
+    id?: string;
+    ...
+}
+
+// mongoose
+... new Schema ({
+    id: Schema.Types.ObjectId,
+    ...
+})
+```
+
+---
+
+#### Javascript config - `dependencyMap`
+
+- defines the import dependency for specific type
+- Example:
+
+```json
+{
+    "dependencyMap": {
+        "Moment": "moment"
+    }
+}
+```
+
+- Generated:
+
+```js
+import { Moment } from 'moment';
+...
+export interface ... {
+    lastUpdatedDate?: Moment;
+}
+```
+
+---
+
+### `Typescript` config
+
+The typescript config is mapped in `coldConfig.json`.`definition`.`typescript`.
+
+Here are the key components of the typescript config.
+
+| key      | desc                                                     |
+| -------- | -------------------------------------------------------- |
+| tsconfig | the definition for generating javascript `tsconfig.json` |
+
+#### Typescript config - `tsconfig`
+
+- same as the `tsconfig.json` generated
+
+---
+
 ## Domain Definition
 
-The domain is be defined in the file `xxx.json`. The definition is mainly based on Java.
+- The domain definition is mapped in `coldConfig.json`.`definition`.`domain`.
+- The definition object types are mainly based on Java.
 
-### Class Definition
+### Class Definition (Basic)
 
 ```JSON
 {
