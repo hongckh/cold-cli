@@ -1,6 +1,6 @@
 {
   "name": "cold-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "CLI tool to generate CrOss Language Domain entities",
   "main": "coldx.js",
   "scripts": {
@@ -35,5 +35,18 @@
   },
   "bin": {
     "coldx": "./coldx.js"
-  }
+  },
+  "keywords": [
+    "cli",
+    "java",
+    "javascript",
+    "js",
+    "mongoose",
+    "domain",
+    "definition",
+    "entities",
+    "generator",
+    "JSON"
+  ],
+  "readme": "README.md"
 }
