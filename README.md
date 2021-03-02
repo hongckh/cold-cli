@@ -36,10 +36,17 @@ Currently supports: `Java`, `JavaScript`, `Mongoose(Js)`
         - [attributes obj - `injection`](#attributes-obj---injection)
         - [attributes obj - `annotate`](#attributes-obj---annotate)
         - [attributes obj - `desc`](#attributes-obj---desc)
+      - [Class Definition - `properties`](#class-definition---properties)
+        - [properties obj - `classType`](#properties-obj---classtype)
+        - [properties obj - `extends`](#properties-obj---extends)
+        - [properties obj - `injection`](#properties-obj---injection)
+        - [properties obj - `annotate`](#properties-obj---annotate)
+        - [properties obj - `dependencies`](#properties-obj---dependencies)
+        - [properties obj - `desc`](#properties-obj---desc)
 
 ## Installation
 
-- install the CLI tool globally
+- Install the CLI tool globally
 
 ```sh
 npm i -g cold-cli
@@ -47,7 +54,7 @@ npm i -g cold-cli
 
 ## Start CLI
 
-- type `coldx` in the command line after installation of the cli package
+- Type `coldx` in the command line after installation of the cli package
 
 ```sh
 coldx
@@ -57,7 +64,7 @@ coldx
 
 Here is a sample project structure for using the CLI tool. (ref: https://github.com/hongckh/cold-cli/tree/main/example)
 
-```
+```txt
 .
 +-- coldConfig.json
 +-- definition
@@ -203,7 +210,7 @@ Here are the key components of the java config.
 #### Java config - `dependencyMap`
 
 - Stores the dependency mapping for generated the required _`import ...`_ string in java class.
-- for any annotation dependency `@` will be the key-prefix. E.g. `@Data`
+- For any annotation dependency `@` will be the key-prefix. E.g. `@Data`
 - Example:
 
 ```json
@@ -316,7 +323,7 @@ export interface ... {
 
 #### Javascript config - `dependencyMap`
 
-- defines the import dependency for specific type
+- Defines the import dependency for specific type
 - Example:
 
 ```json
@@ -351,7 +358,7 @@ Here are the key components of the typescript config.
 
 #### Typescript config - `tsconfig`
 
-- same as the `tsconfig.json` generated
+- Same as the `tsconfig.json` generated
 
 ---
 
@@ -441,7 +448,7 @@ export { ClassASchema };
 
 #### Class Definition - `attributes`
 
-- the `attributes` key indicates the object storing the class attributes.
+- The `attributes` key indicates the object storing the class attributes.
 - Here are the main components of an attribute object:
 
 | key         | desc                                                | example                   |
@@ -451,11 +458,15 @@ export { ClassASchema };
 | `annotate`  | annotation of the attribute                         | `"annotate": "NotNull"`   |
 | `desc`      | description of the attribute                        | `"desc": "A short desc."` |
 
+---
+
 ##### attributes obj - `type`
 
 - Java: directly write the same value
 - Javascript: base on the `javascriptTypeMap`
 - Mongoose: base on the `mongooseTypeMap`
+
+---
 
 ##### attributes obj - `injection`
 
@@ -511,10 +522,12 @@ const ClassASchema = new Schema ({
 });
 ```
 
+---
+
 ##### attributes obj - `annotate`
 
-- annotation is mainly for java code generation.
-- it can be a string / an object / a array.
+- Annotation is mainly for java code generation.
+- It can be a string / an object / a array.
 - Example:
 
 ```json
@@ -538,6 +551,8 @@ private String classAField1;
 private String classAField2;
 ```
 
+---
+
 ##### attributes obj - `desc`
 
 - Defines the comment of the attribute
@@ -555,8 +570,150 @@ private String classAField2;
 private String classAField1;
 
 /**
-    * desc line 1
-    * desc line 2
+ * desc line 1
+ * desc line 2
 */
 private String classAField2;
 ```
+
+---
+
+#### Class Definition - `properties`
+
+- The `properties` key indicates the object storing the class properties.
+- Here are the main components of an properties object:
+
+| key            | desc                                       | example                                |
+| -------------- | ------------------------------------------ | -------------------------------------- |
+| `classType`    | specific type of class                     | `"classType": "ABSTRACT_CLASS"`        |
+| `extends`      | class extended                             | `"extends": "ClassB"`                  |
+| `injection`    | type of class for injecting into the class | `"injection": "String"`                |
+| `annotate`     | annotation of the attribute                | `"annotate": "Data"`                   |
+| `dependencies` | specific dependencies for import (java)    | `"dependencies": "ToStringSerializer"` |
+| `desc`         | description of the attribute               | `"desc": "A short desc."`              |
+
+---
+
+##### properties obj - `classType`
+
+- The classType is mainly for defining special class e.g. enumeration / java abstract class
+
+| classType        | class                   |
+| ---------------- | ----------------------- |
+| `ABSTRACT_CLASS` | `public abstract class` |
+| `ENUM`           | `public enum`           |
+
+---
+
+##### properties obj - `extends`
+
+- Defines the class to be extended
+- Example:
+
+```json
+"extends" : "ClassB",
+```
+
+- Generated java:
+
+```java
+public class ClassA extends ClassB {...}
+```
+
+- Generated javascript:
+
+```js
+export interface IClassA extends IClassB {...}
+```
+
+- Generated mongoose:
+
+```js
+const ClassASchema = new Schema ({})
+```
+
+---
+
+##### properties obj - `injection`
+
+- Defines the class to be injected
+- Example
+
+```json
+"properties" : { "injection": "T" }
+```
+
+- Generated java:
+
+```java
+public class ClassA<T>
+```
+
+- Generated javascript
+
+```js
+export interface IClassA<T> {...}
+```
+
+- Generated mongoose
+
+```js
+const ClassASchema = new Schema ({...})
+```
+
+---
+
+##### properties obj - `annotate`
+
+- Annotation is mainly for java code generation
+- Example:
+
+```json
+"annotate" : [
+    "Data",
+    "EqualsAndHashCode",
+    "ToString",
+    "JsonInclude",
+    { "Sharded" : "shardKey = { \"classAId\" }" },
+    { "Document" : { "collection" : "collection_a" } },
+    { "TypeName" : "\"ClassA\"" }
+]
+```
+
+- Generated Java:
+
+```java
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true, includeFieldNames = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Sharded(shardKey = { "classAId" })
+@Document(collection = "collection_a")
+@TypeName("ClassA")
+public class ClassA extends ClassB {...}
+```
+
+---
+
+##### properties obj - `dependencies`
+
+- Add specific import dependencies needed for the class
+  - Will search the `dependencyMap` for the predefined import
+- Mainly for java code generation
+- Example:
+
+```json
+"dependencies" : [ "ToStringSerializer" ]
+```
+
+- Generated Java:
+
+```java
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+```
+
+---
+
+##### properties obj - `desc`
+
+- Same as the `desc` in the class attributes
