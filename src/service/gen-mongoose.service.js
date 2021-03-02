@@ -50,8 +50,8 @@ class GenMongooseService {
     }
 
     async gen() {
-        logger.infoFile('===============================================');
-        logger.infoFile(`Creating Mongoose Library - version: ${ConfigProperties.LIB_VERSION}`);
+        logger.infoFileOnly('===============================================');
+        logger.infoFileOnly(`Creating Mongoose Library - version: ${ConfigProperties.LIB_VERSION}`);
 
         const startTimer = new Date();
 
@@ -69,7 +69,7 @@ class GenMongooseService {
 
         const totalTime = CommonUtils.getTimeDiff(startTimer);
 
-        logger.infoFile(`All mongoose lib generated [ver: ${this.LIB_VERSION}]... `);
+        logger.infoFileOnly(`All mongoose lib generated [ver: ${this.LIB_VERSION}]... `);
         this.SPINNER.succeed(`All ${chalk.cyan.underline.bold('MONGOOSE')} lib files generated [${chalk.yellow.bold(totalTime + 's')}]`);
     }
 
@@ -111,7 +111,7 @@ class GenMongooseService {
     /** Delete Previously Generated Target if exists */
     async deleteGeneratedTarget() {
         await new Promise(resolve => {
-            // logger.infoFile(`Clearing target refresh directory : ${this.OUTPUT_TARGET_REFRESH_DIR}`);
+            // logger.infoFileOnly(`Clearing target refresh directory : ${this.OUTPUT_TARGET_REFRESH_DIR}`);
             rimraf(this.OUTPUT_TARGET_REFRESH_DIR, () => resolve());
         });
     }
@@ -155,7 +155,7 @@ class GenMongooseService {
                 + ` [${CommonUtils.getLoadPercentageStr(domainService.COUNT_CLASS, this.processedClass)}] `
                 // + '[v.' + chalk.green(this.LIB_VERSION) + '] '
                 + chalk.yellow(processingFile);
-            logger.infoFile(`Creating ${processingFile}`);
+            logger.infoFileOnly(`Creating ${processingFile}`);
 
             this.processedClass++;
 

@@ -1,26 +1,37 @@
-const winston = require('src/config/winston.config');
+
+const ConfigProperties = require('src/config/config-properties');
 
 class Logger {
-
     constructor() {
     }
 
-    info(data){
-        winston.winstonLogger.info(data);
+    init() {
+        this.winston = require('src/config/winston.config');
     }
 
-    error(data){
-        winston.winstonLogger.error(data);
+    info(data) {
+        ConfigProperties.isLogEnabled()
+            ? this.winston.winstonLogger.info(data)
+            : this.winston.winstonConsoleLogger.info(data);
     }
 
-    infoFile(data) {
-        winston.winstonFileLogger.info(data);
+    error(data) {
+        ConfigProperties.isLogEnabled()
+            ? this.winston.winstonLogger.error(data)
+            : this.winston.winstonConsoleLogger.error(data);
+    }
+
+    infoFileOnly(data) {
+        ConfigProperties.isLogEnabled()
+            ? this.winston.winstonFileLogger.info(data)
+            : void 0;
     }
 
     errorFile(data) {
-        winston.winstonFileLogger.error(data);
+        ConfigProperties.isLogEnabled()
+            ? this.winston.winstonFileLogger.error(data)
+            : void 0;
     }
-
 }
 
 // singleton logger

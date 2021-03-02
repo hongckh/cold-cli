@@ -17,5 +17,7 @@
         "typescript": "config/typescript.json"
     },
     "commentBlockMaxCharPerLine": 80,
-    "indentation": 4
+    "indentation": 4,
+    "logEnabled" : true,
+    "logDir" : "logs"
 }

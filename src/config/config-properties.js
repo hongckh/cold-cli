@@ -5,7 +5,8 @@ const CommonUtils = require('src/utils/common.utils');
 const DEF_CONFIG = {
     configFile : "coldConfig.json",
     commentBlockMaxCharPerLine : 80,
-    indentation : 4
+    indentation : 4,
+    logEnabled: false
 };
 
 /**
@@ -107,10 +108,23 @@ class ConfigProperties {
 
         /** Comment block  */
         this.MAX_CHAR_PER_LINE = !_.isEmpty(this.CONFIG_JSON.commentBlockMaxCharPerLine) ? this.CONFIG_JSON.commentBlockMaxCharPerLine : DEF_CONFIG.commentBlockMaxCharPerLine;
+
+        this.initLogConfig();
+    }
+
+    initLogConfig(){
+        this.LOG_ENABLED = !_.isNaN(this.CONFIG_JSON.logEnabled) ? this.CONFIG_JSON.logEnabled : DEF_CONFIG.logEnabled;
+        this.LOG_DIR = this.CONFIG_JSON.logDir ? this.CONFIG_JSON.logDir : 'logs';
     }
 
     /** Get library version */
     getLibVer() { return this.LIB_VERSION; }
+
+    /** Check if log is enabled */
+    isLogEnabled() {
+        if (this.LOG_DIR) return true;
+        return this.LOG_ENABLED;
+    }
 
 }
 

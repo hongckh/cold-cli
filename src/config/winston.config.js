@@ -1,6 +1,8 @@
 const winston = require('winston');
 require('winston-daily-rotate-file');
 
+const ConfigProperties = require('src/config/config-properties');
+
 const timeFormatFull = {
   year: 'numeric',
   month: '2-digit',
@@ -62,7 +64,7 @@ const logFormatConsole = winston.format.printf(function (info) {
 const options = {
   file: {
     level: 'info',
-    filename: 'logs/app-%DATE%.log',
+    filename: `${ConfigProperties.LOG_DIR}/app-%DATE%.log`,
     handleExceptions: true,
     json: true,
     maxSize: '100m',
@@ -82,7 +84,9 @@ const options = {
 };
 
 const consoleTransports = new winston.transports.Console(options.console);
-const fileTransports = new winston.transports.DailyRotateFile(options.file);
+const fileTransports = ConfigProperties.isLogEnabled()
+  ? new winston.transports.DailyRotateFile(options.file)
+  : new winston.transports.Console(options.console);
 
 fileTransports.on('rotate', function (oldFilename, newFilename) {
   // do anything
@@ -103,6 +107,13 @@ const winstonFileLogger = new winston.createLogger({
   exitOnError: false, // do not exist on handled exceptions
 });
 
+const winstonConsoleLogger = new winston.createLogger({
+  transports: [
+    consoleTransports,
+  ],
+  exitOnError: false, // do not exist on handled exceptions
+});
+
 winstonLogger.stream = {
   // eslint-disable-next-line no-unused-vars
   write: function (message, encoding) {
@@ -112,5 +123,6 @@ winstonLogger.stream = {
 
 module.exports = {
   winstonLogger : winstonLogger,
-  winstonFileLogger : winstonFileLogger
+  winstonFileLogger : winstonFileLogger,
+  winstonConsoleLogger : winstonConsoleLogger,
 };

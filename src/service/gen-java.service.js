@@ -61,8 +61,8 @@ class GenJavaService {
     }
 
     async gen() {
-        logger.infoFile('===============================================');
-        logger.infoFile(`Creating Java Library - version: ${this.LIB_VERSION}`);
+        logger.infoFileOnly('===============================================');
+        logger.infoFileOnly(`Creating Java Library - version: ${this.LIB_VERSION}`);
 
         const startTimer = new Date();
 
@@ -80,7 +80,7 @@ class GenJavaService {
 
         const totalTime = CommonUtils.getTimeDiff(startTimer);
 
-        logger.infoFile(`All java lib generated [version: ${this.LIB_VERSION}]... `);
+        logger.infoFileOnly(`All java lib generated [version: ${this.LIB_VERSION}]... `);
         this.SPINNER.succeed(`All ${chalk.cyan.underline.bold('JAVA')} lib files generated [${chalk.yellow.bold(totalTime + 's')}]`);
 
     }
@@ -122,7 +122,7 @@ class GenJavaService {
                 + ` [${CommonUtils.getLoadPercentageStr(domainService.COUNT_CLASS, this.processedClass)}] `
                 // + '[v.' + chalk.green(this.LIB_VERSION) + '] '
                 + chalk.yellow(processingFile);
-            logger.infoFile(`Creating ${processingFile}`);
+            logger.infoFileOnly(`Creating ${processingFile}`);
 
             this.processedClass++;
 

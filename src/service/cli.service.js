@@ -1,7 +1,6 @@
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 
-const logger = require('src/service/logger.service');
 const genJavaService = require('src/service/gen-java.service');
 const genMongooseService = require('src/service/gen-mongoose.service');
 const genJsService = require('src/service/gen-js.service');

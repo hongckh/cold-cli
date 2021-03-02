@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const xmlBuilder = require('xmlbuilder');
 
-const logger = require('src/service/logger.service');
 const ConfigProperties = require('src/config/config-properties');
 
 class XmlBuilderUtils {
@@ -37,7 +36,7 @@ class XmlBuilderUtils {
                     try{
                         configVal = ConfigProperties.CONFIG_JSON[value.replace(/^\${/,'').replace(/}$/, '')];
                     } catch (err) {
-                        logger.error('XML Object generation error : ' + err);
+                        console.error('XML Object generation error : ' + err);
                         configVal = undefined;
                     }
                     xmlObj[key] = { '#text': configVal ? configVal : value };

@@ -26,6 +26,10 @@ const init = async () => {
     genMongooseService.init();
     genJsService.init();
 
+    /** Initiate winston logger */
+    require('src/config/winston.config');
+    logger.init();
+
     const totalClass = await domainService.getAllClassCount();
     const libVer = domainService.getDomainVersion();
     spinner.isSpinning

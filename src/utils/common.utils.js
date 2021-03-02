@@ -1,8 +1,6 @@
 const fs = require('fs');
 const _ = require('lodash');
 
-const logger = require('src/service/logger.service');
-
 class CommonUtils {
 
     static getJsonFromFile(filePath) {
@@ -15,7 +13,7 @@ class CommonUtils {
             const buffer = fs.readFileSync(filePath);
             return JSON.parse(buffer);
         } catch (e) {
-            logger.error(`Failed to get JSON from file : ${filePath}`);
+            console.error(`Failed to get JSON from file : ${filePath}`);
         }
     }
 
