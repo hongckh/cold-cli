@@ -6,8 +6,8 @@
         "javaRefreshDir": "src/main/java/com/cold/common/coldcommonlib/domain",
         "mongooseDir": "cold-common-lib-mongoose",
         "mongooseRefreshDir": "src/domain",
-        "javascriptDir": "cold-common-lib-js",
-        "javascriptRefreshDir": "src/domain"
+        "jsDir": "cold-common-lib-js",
+        "jsRefreshDir": "src/domain"
     },
     "definition": {
         "baseDir": "definition",
