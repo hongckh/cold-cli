@@ -14,6 +14,10 @@ const CommonUtils = require('src/utils/common.utils');
 
 class GenMongooseService {
     constructor() {
+        this.init();
+    }
+
+    init(){
         /** Get Library Version */
         this.LIB_VERSION = ConfigProperties.LIB_VERSION;
 

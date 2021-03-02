@@ -15,6 +15,10 @@ const CommonUtils = require('src/utils/common.utils');
 /** Service for generating javascript common library */
 class GenJsService {
     constructor() {
+        this.init();
+    }
+
+    init(){
         /** Get Library Version */
         this.LIB_VERSION = ConfigProperties.LIB_VERSION;
 
