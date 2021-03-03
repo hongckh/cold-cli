@@ -4,7 +4,7 @@
 	<br>
 	<span style="font-weight: 900; font-size: 50px">COLD-CLI</span>
 	<br>
-    <span style="font-weight: 100">CrOss Language Domain generator - Command Line Interface</span>
+    <span style="font-weight: 100">CrOss Language Domain generator</span>
 	<br>
 	<br>
 </h1>
@@ -20,8 +20,9 @@ Currently supports: `Java`, `JavaScript`, `Mongoose(Js)`
 
 **Note:** the project is still under constant development!
 
-<span style="font-weight: 500; font-size: 25px">Table of content</span>
+## Table of content
 
+- [Table of content](#table-of-content)
 - [Installation](#installation)
 - [Start CLI](#start-cli)
 - [Sample Project Structure](#sample-project-structure)
