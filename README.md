@@ -1,4 +1,16 @@
-# **COLD-CLI**
+
+<h1 align="center">
+    <br>
+	<br>
+	<span style="font-weight: 900; font-size: 50px">COLD-CLI</span>
+	<br>
+    <span style="font-weight: 100">CrOss Language Domain generator - Command Line Interface</span>
+	<br>
+	<br>
+</h1>
+
+[![npm dependents](https://badgen.net/npm/dependents/cold-cli)](https://www.npmjs.com/package/cold-cli?activeTab=dependents)
+[![Downloads](https://badgen.net/npm/dt/cold-cli)](https://www.npmjs.com/package/cold-cli)
 
 > JSON defines ALL @.@
 
@@ -8,41 +20,39 @@ Currently supports: `Java`, `JavaScript`, `Mongoose(Js)`
 
 **Note:** the project is still under constant development!
 
-## Table of content
+<span style="font-weight: 500; font-size: 25px">Table of content</span>
 
-- [**COLD-CLI**](#cold-cli)
-  - [Table of content](#table-of-content)
-  - [Installation](#installation)
-  - [Start CLI](#start-cli)
-  - [Sample Project Structure](#sample-project-structure)
-  - [coldConfig.json](#coldconfigjson)
-    - [Config variables](#config-variables)
-      - [Sample coldConfig.json](#sample-coldconfigjson)
-  - [Language based config](#language-based-config)
-    - [`Java` config](#java-config)
-      - [Java config - `maven`](#java-config---maven)
-      - [Java config - `dependencyMap`](#java-config---dependencymap)
-      - [Java config - `annotateDefaultVal`](#java-config---annotatedefaultval)
-    - [`Javascript` config](#javascript-config)
-      - [Javascript config - `packageJavascript` / `packageMongoose`](#javascript-config---packagejavascript--packagemongoose)
-      - [Javascript config - `javascriptTypeMap` / `mongooseTypeMap`](#javascript-config---javascripttypemap--mongoosetypemap)
-      - [Javascript config - `dependencyMap`](#javascript-config---dependencymap)
-    - [`Typescript` config](#typescript-config)
-      - [Typescript config - `tsconfig`](#typescript-config---tsconfig)
-  - [Domain Definition](#domain-definition)
-    - [Class Definition](#class-definition)
-      - [Class Definition - `attributes`](#class-definition---attributes)
-        - [attributes obj - `type`](#attributes-obj---type)
-        - [attributes obj - `injection`](#attributes-obj---injection)
-        - [attributes obj - `annotate`](#attributes-obj---annotate)
-        - [attributes obj - `desc`](#attributes-obj---desc)
-      - [Class Definition - `properties`](#class-definition---properties)
-        - [properties obj - `classType`](#properties-obj---classtype)
-        - [properties obj - `extends`](#properties-obj---extends)
-        - [properties obj - `injection`](#properties-obj---injection)
-        - [properties obj - `annotate`](#properties-obj---annotate)
-        - [properties obj - `dependencies`](#properties-obj---dependencies)
-        - [properties obj - `desc`](#properties-obj---desc)
+- [Installation](#installation)
+- [Start CLI](#start-cli)
+- [Sample Project Structure](#sample-project-structure)
+- [coldConfig.json](#coldconfigjson)
+  - [Config variables](#config-variables)
+    - [Sample coldConfig.json](#sample-coldconfigjson)
+- [Language based config](#language-based-config)
+  - [`Java` config](#java-config)
+    - [Java config - `maven`](#java-config---maven)
+    - [Java config - `dependencyMap`](#java-config---dependencymap)
+    - [Java config - `annotateDefaultVal`](#java-config---annotatedefaultval)
+  - [`Javascript` config](#javascript-config)
+    - [Javascript config - `packageJavascript` / `packageMongoose`](#javascript-config---packagejavascript--packagemongoose)
+    - [Javascript config - `javascriptTypeMap` / `mongooseTypeMap`](#javascript-config---javascripttypemap--mongoosetypemap)
+    - [Javascript config - `dependencyMap`](#javascript-config---dependencymap)
+  - [`Typescript` config](#typescript-config)
+    - [Typescript config - `tsconfig`](#typescript-config---tsconfig)
+- [Domain Definition](#domain-definition)
+  - [Class Definition](#class-definition)
+    - [Class Definition - `attributes`](#class-definition---attributes)
+      - [attributes obj - `type`](#attributes-obj---type)
+      - [attributes obj - `injection`](#attributes-obj---injection)
+      - [attributes obj - `annotate`](#attributes-obj---annotate)
+      - [attributes obj - `desc`](#attributes-obj---desc)
+    - [Class Definition - `properties`](#class-definition---properties)
+      - [properties obj - `classType`](#properties-obj---classtype)
+      - [properties obj - `extends`](#properties-obj---extends)
+      - [properties obj - `injection`](#properties-obj---injection)
+      - [properties obj - `annotate`](#properties-obj---annotate)
+      - [properties obj - `dependencies`](#properties-obj---dependencies)
+      - [properties obj - `desc`](#properties-obj---desc)
 
 ## Installation
 
